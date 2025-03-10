@@ -209,7 +209,7 @@ class MainWindow : JFrame(), ActionListener, KeyListener {
 
         val rgb =  Color(redField.text.toInt(), greenField.text.toInt(), blueField.text.toInt())
         hexDisplay.background = rgb
-        hexCodeLabel.text = String.format("#%02x%02x%02x", redField.text.toInt(), greenField.text.toInt(), blueField.text.toInt());
+        hexCodeLabel.text = String.format("#%02x%02x%02x", redField.text.toInt(), greenField.text.toInt(), blueField.text.toInt())
         redField.background = Color(redField.text.toInt(), 0, 0)
         greenField.background = Color(0, greenField.text.toInt(), 0)
         blueField.background = Color(0, 0, blueField.text.toInt())
