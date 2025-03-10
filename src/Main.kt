@@ -28,7 +28,7 @@ fun main() {
  * Defines the UI and responds to events
  * The app model should be passwd as an argument
  */
-class MainWindow : JFrame(), ActionListener {
+class MainWindow : JFrame(), ActionListener, KeyListener {
 
     // Fields to hold the UI elements
     private lateinit var redLabel: JLabel
@@ -99,10 +99,11 @@ class MainWindow : JFrame(), ActionListener {
         redPlus.addActionListener(this)     // Handle any clicks
         add(redPlus)
 
-        redField = JTextField()
+        redField = JTextField("0")
         redField.bounds = Rectangle(150, 50, 50, 50)
         redField.font = Font(Font.SANS_SERIF, Font.PLAIN, 20)
         redField.addActionListener(this)
+        redField.addKeyListener(this)
         add(redField)
 
 
@@ -124,10 +125,11 @@ class MainWindow : JFrame(), ActionListener {
         greenPlus.addActionListener(this)     // Handle any clicks
         add(greenPlus)
 
-        greenField = JTextField()
+        greenField = JTextField("0")
         greenField.bounds = Rectangle(150, 150, 50, 50)
         greenField.font = Font(Font.SANS_SERIF, Font.PLAIN, 20)
         greenField.addActionListener(this)
+        greenField.addKeyListener(this)
         add(greenField)
 
 
@@ -150,30 +152,35 @@ class MainWindow : JFrame(), ActionListener {
         bluePlus.addActionListener(this)     // Handle any clicks
         add(bluePlus)
 
-        blueField = JTextField()
+        blueField = JTextField("0")
         blueField.bounds = Rectangle(150, 250, 50, 50)
         blueField.font = Font(Font.SANS_SERIF, Font.PLAIN, 20)
         blueField.addActionListener(this)
+        blueField.addKeyListener(this)
         add(blueField)
 
 
-        hexTitle = JLabel("B")
+        hexTitle = JLabel("HEX")
         hexTitle.horizontalAlignment = SwingConstants.CENTER
-        hexTitle.bounds = Rectangle(300, 50, 50, 50)
+        hexTitle.bounds = Rectangle(300, 50, 150, 50)
         hexTitle.font = defaultFont
         add(hexTitle)
 
-        hexDisplay = JLabel()
+        hexDisplay = JLabel(" ")
         hexDisplay.horizontalAlignment = SwingConstants.CENTER
-        hexDisplay.bounds = Rectangle(300, 100, 50, 50)
+        hexDisplay.bounds = Rectangle(300, 100, 150, 150)
         hexDisplay.font = defaultFont
+        hexDisplay.background = Color(0,0,0,255)
+        hexDisplay.isOpaque = true
         add(hexDisplay)
 
-        hexCodeLabel = JLabel("B")
+        hexCodeLabel = JLabel("#         ")
         hexCodeLabel.horizontalAlignment = SwingConstants.CENTER
-        hexCodeLabel.bounds = Rectangle(300, 50, 50, 50)
+        hexCodeLabel.bounds = Rectangle(300, 250, 150, 50)
         hexCodeLabel.font = defaultFont
         add(hexCodeLabel)
+
+        updateUi()
     }
 
 
@@ -182,10 +189,44 @@ class MainWindow : JFrame(), ActionListener {
      */
     override fun actionPerformed(e: ActionEvent?) {
         when (e?.source) {
-            redMinus -> {
-                redLabel.text = "You clicked the button!"
-            }
+            redMinus   -> redField.text   = (redField.text.toInt()   - 1).toString()
+            redPlus    -> redField.text   = (redField.text.toInt()   + 1).toString()
+            greenMinus -> greenField.text = (greenField.text.toInt() - 1).toString()
+            greenPlus  -> greenField.text = (greenField.text.toInt() + 1).toString()
+            blueMinus  -> blueField.text  = (blueField.text.toInt()  - 1).toString()
+            bluePlus   -> blueField.text  = (blueField.text.toInt()  + 1).toString()
         }
+        updateUi()
+    }
+
+    private fun updateUi() {
+        if (redField.text.toInt() > 255) redField.text = "0"
+        if (greenField.text.toInt() > 255) greenField.text = "0"
+        if (blueField.text.toInt() > 255) blueField.text = "0"
+        if (redField.text.toInt() < 0) redField.text = "255"
+        if (greenField.text.toInt() < 0) greenField.text = "255"
+        if (blueField.text.toInt() < 0) blueField.text = "255"
+
+        val rgb =  Color(redField.text.toInt(), greenField.text.toInt(), blueField.text.toInt())
+        hexDisplay.background = rgb
+        hexCodeLabel.text = String.format("#%02x%02x%02x", redField.text.toInt(), greenField.text.toInt(), blueField.text.toInt());
+        redField.background = Color(redField.text.toInt(), 0, 0)
+        greenField.background = Color(0, greenField.text.toInt(), 0)
+        blueField.background = Color(0, 0, blueField.text.toInt())
+    }
+
+    override fun keyTyped(e: KeyEvent?) {
+        println("Key typed")
+    }
+
+    override fun keyPressed(e: KeyEvent?) {
+        println("Key Pressed")
+
+    }
+
+    override fun keyReleased(e: KeyEvent?) {
+        println("Key Released")
+        updateUi()
     }
 
 }
