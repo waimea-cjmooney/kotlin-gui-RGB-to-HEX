@@ -267,14 +267,16 @@ class MainWindow : JFrame(), ActionListener, KeyListener, ChangeListener, MouseL
             }
 
             timer      -> {
-                when (whatClicked) {
-                    "redMinus"   -> {if (clicked) redField.text.toInt()   - 1}
-                    "redPlus"    -> {if (clicked) redField.text.toInt()   + 1}
-                    "greenMinus" -> {if (clicked) greenField.text.toInt() - 1}
-                    "greenPlus"  -> {if (clicked) greenField.text.toInt() + 1}
-                    "blueMinus"  -> {if (clicked) blueField.text.toInt()  - 1}
-                    "bluePlus"   -> {if (clicked) blueField.text.toInt()  + 1}
-                    else -> println("tick")
+                if (clicked){
+                    when (whatClicked) {
+                        "redMinus"   -> {redField.text.toInt()   - 1}
+                        "redPlus"    -> {redField.text.toInt()   + 1}
+                        "greenMinus" -> {greenField.text.toInt() - 1}
+                        "greenPlus"  -> {greenField.text.toInt() + 1}
+                        "blueMinus"  -> {blueField.text.toInt()  - 1}
+                        "bluePlus"   -> {blueField.text.toInt()  + 1}
+                        else -> println("tick")
+                    }
                 }
             }
         }
@@ -316,6 +318,7 @@ class MainWindow : JFrame(), ActionListener, KeyListener, ChangeListener, MouseL
 
     override fun mouseReleased(e: MouseEvent?) {
         clicked = false
+        whatClicked = ""
         println("mouseReleased")
     }
 
